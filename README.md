@@ -115,6 +115,39 @@ transaction(myNewNumber: Int) {
 
 ## Chapter 2 Day 3
 
+1)
+```
+pub fun main(){
+    var myFavs: [String] = ["Santa","Santana","Satan"]
+    log(myFavs)
+}
+```
+2)
+```
+pub fun main() {
+    var s : {String:UInt64} = {"LinkedIn":0, "Facebook":1, "Instagram":2, "YouTube":3, "Reddit":5}
+    log(s)
+    return
+}
+```
+3)
+The force-unwrap operator "!" unwraps an optional type. If the value is nil a panic will be thrown, otherwise we will know we have a value and can continue execution.
+```
+pub fun main(): Int {
+    var int1: Int? = 100
+    var unwrappedInt1: Int = int1!
+    
+    var int2: Int? = nil
+    var unwrappedInt2: Int = int2! //error cant continue
+    return int2!
+}
+```
+4) We are getting the error because we are returning the wrong type. We must use the "!" to unwrap the optional when returning thing[0x03].
+
+```
+return thing[0x03]!
+```
+
 ## Chapter 2 Day 4
 
 
