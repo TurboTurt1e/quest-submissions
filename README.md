@@ -149,7 +149,61 @@ return thing[0x03]!
 
 ## Chapter 2 Day 4
 
+1,2,3)
+```
+pub contract FilterPresets {
 
+    pub var filterPresets: {Int: FilterPreset}
+    pub var numPresets: Int
+
+    pub struct FilterPreset {
+        pub let cutoff: Int
+        pub let resonance: Int
+        pub let filterType: String
+
+        init(Cutoff: Int, Resonance: Int, FilterType: String)
+        {
+            self.cutoff = Cutoff
+            self.resonance = Resonance
+            self.filterType = FilterType
+        }
+
+    }
+
+    pub fun addNewFilterPreset(cutoff: Int, resonance: Int, filterType: String)
+    {
+        let newFilterPreset = FilterPreset(Cutoff: cutoff, Resonance: resonance, FilterType: filterType)
+        self.filterPresets[self.numPresets] = newFilterPreset
+        self.numPresets = self.numPresets + 1
+    }
+
+    init() {
+        self.filterPresets = {}
+        self.numPresets = 0
+    }
+}
+```
+4)
+```
+import FilterPresets from 0x01
+
+transaction(cutoff: Int, resonance: Int, filterType: String) {
+
+  prepare(signer: AuthAccount) {}
+
+  execute {
+    FilterPresets.addNewFilterPreset(cutoff: cutoff, resonance: resonance, filterType: filterType)
+  }
+}
+```
+5)
+```
+import FilterPresets from 0x01
+
+pub fun main(id: Int): FilterPresets.FilterPreset {
+    return FilterPresets.filterPresets[id]!
+}
+```
 ## Chapter 3 Day 1
 
 ## Chapter 3 Day 2
