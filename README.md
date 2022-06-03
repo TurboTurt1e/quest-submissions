@@ -4,8 +4,7 @@ Emerald Academy
 
 ## Chapter 1 Day 1
 
-1) What is a blockchain?
-
+1) What is a blockchain? 
 A blockchain is an open public decentralized database. 
 
 2) What is a Smart Contract? 
