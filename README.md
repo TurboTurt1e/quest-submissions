@@ -710,7 +710,107 @@ No it is not good... If we implement a borrow function, we will no longer need t
 
 ## Chapter 4 Day 4
 
+```
+pub contract CryptoPoops {
+  pub var totalSupply: UInt64
 
+  // This is an NFT resource that contains a name,
+  // favouriteFood, and luckyNumber
+  pub resource NFT {
+    pub let id: UInt64
+
+    pub let name: String
+    pub let favouriteFood: String
+    pub let luckyNumber: Int
+
+    //upon creation, set NFT's id, name, favoriteFood, and luckyNumber
+    init(_name: String, _favouriteFood: String, _luckyNumber: Int) {
+      self.id = self.uuid
+
+      self.name = _name
+      self.favouriteFood = _favouriteFood
+      self.luckyNumber = _luckyNumber
+    }
+  }
+
+  // This resource interface will help us to make deposit, getIDs, and borrowNFT functionality publicly available
+  pub resource interface CollectionPublic {
+    pub fun deposit(token: @NFT)
+    pub fun getIDs(): [UInt64]
+    pub fun borrowNFT(id: UInt64): &NFT
+  }
+
+  // This resource collection will implement the resource interface
+  // This resource Collection will enable us to deposit multiple NFTs to a single storage location. 
+  pub resource Collection: CollectionPublic {
+    
+    // this dictionary maps an id to an NFT
+    pub var ownedNFTs: @{UInt64: NFT}
+
+    // implement deposit functionality into the Collection
+    // this is part of the resource interface
+    pub fun deposit(token: @NFT) {
+      self.ownedNFTs[token.id] <-! token
+    }
+
+    // implement withdraw functionality
+    // this is not part of the resource interface
+    pub fun withdraw(withdrawID: UInt64): @NFT {
+      let nft <- self.ownedNFTs.remove(key: withdrawID) 
+              ?? panic("This NFT does not exist in this Collection.")
+      return <- nft
+    }
+
+    // retrieve a list of NFT IDs from a user
+    // this is part of the resource interface
+    pub fun getIDs(): [UInt64] {
+      return self.ownedNFTs.keys
+    }
+
+    // borrow a reference to an NFT
+    // this is part of the resource interface
+    pub fun borrowNFT(id: UInt64): &NFT {
+      return &self.ownedNFTs[id] as &NFT
+    }
+
+    // initialize dictionary ownedNFTs to empty 
+    init() {
+      self.ownedNFTs <- {}
+    }
+    
+    // if the collection is destroyed, destroy the NFTs that are nested resources
+    destroy() {
+      destroy self.ownedNFTs
+    }
+  }
+
+  // used to create an empty collection in a user account before they can accept delivery of our NFTs
+  pub fun createEmptyCollection(): @Collection {
+    return <- create Collection()
+  }
+
+  // anyone with the Minter resource can mint NFTs
+  pub resource Minter {
+    // function to Mint NFTs
+    pub fun createNFT(name: String, favouriteFood: String, luckyNumber: Int): @NFT {
+      return <- create NFT(_name: name, _favouriteFood: favouriteFood, _luckyNumber: luckyNumber)
+    }
+
+    // function to mint the Minter resource
+    pub fun createMinter(): @Minter {
+      return <- create Minter()
+    }
+
+  }
+
+  // initialize totalSupply to begin at 0
+  // save Minter resource to the account that deployed the contract
+  init() {
+    self.totalSupply = 0
+    self.account.save(<- create Minter(), to: /storage/Minter)
+  }
+}
+```
 
 ## Chapter 5 Day 1
 
