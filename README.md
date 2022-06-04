@@ -611,6 +611,24 @@ transaction(name: String, description: String) {
 ```
 ## Chapter 4 Day 2
 
+1) What does .link() do? 
+
+.link() can be used to link resources to the public so that other people can have access it.
+
+2) In your own words (no code), explain how we can use resource interfaces to only expose certain things to the /public/ path.
+
+Resource interfaces can be used to enable controlled access to things in /storage/ that would normally be unavailable to other users by exposing access to certain things via the /public/ path.
+
+3) Deploy a contract that contains a resource that implements a resource interface. Then, do the following:
+
+In a transaction, save the resource to storage and link it to the public with the restrictive interface.
+
+Run a script that tries to access a non-exposed field in the resource interface, and see the error pop up.
+
+Run the script and access something you CAN read from. Return it from the script.
+
+
+
 ## Chapter 4 Day 3
 
 ## Chapter 4 Day 4
