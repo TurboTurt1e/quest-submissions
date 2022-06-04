@@ -701,7 +701,11 @@ If we have nested resources, we must declare a destroy function and use the dest
 
 Idea #1: Do we really want everyone to be able to mint an NFT? thinking.
 
+We could restrict minting access by implementing some type of access privilege based on an approved address list or we could requiring a user to be in possesion of a specific resource ("Minting Key NFT") in order to access minting functionality.
+
 Idea #2: If we want to read information about our NFTs inside our Collection, right now we have to take it out of the Collection to do so. Is this good?
+
+No it is not good... If we implement a borrow function, we will no longer need to take the NFT out of the collection to read it.
 
 
 ## Chapter 4 Day 4
