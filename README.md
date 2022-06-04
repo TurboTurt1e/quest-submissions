@@ -394,7 +394,123 @@ pub contract Stuff {
 ```
 
 ## Chapter 3 Day 5
+```
+access(all) contract SomeContract {
+    pub var testStruct: SomeStruct
 
+    pub struct SomeStruct {
+
+        //
+        // 4 Variables
+        //
+
+        pub(set) var a: String
+
+        pub var b: String
+
+        access(contract) var c: String
+
+        access(self) var d: String
+
+        //
+        // 3 Functions
+        //
+
+        pub fun publicFunc() {}
+
+        access(contract) fun contractFunc() {}
+
+        access(self) fun privateFunc() {}
+
+
+        pub fun structFunc() {
+            /**************/
+            /*** AREA 1 ***/
+            /**************/
+            
+            // a - can read and write
+            // b - can read and write
+            // c - can read and write
+            // d - can read and write
+            // publicFunc   - can be called
+            // contractFunc - can be called
+            // privateFunc  - can be called
+        }
+
+        init() {
+            self.a = "a"
+            self.b = "b"
+            self.c = "c"
+            self.d = "d"
+        }
+    }
+
+    pub resource SomeResource {
+        pub var e: Int
+
+        pub fun resourceFunc() {
+            /**************/
+            /*** AREA 2 ***/
+            /**************/
+            
+            // a - can both read and write
+            // b - can read but cannot write
+            // c - can read but cannot write
+            // d - cannot read and cannot write
+            // publicFunc   - can be called
+            // contractFunc - can be called
+            // privateFunc  - cannot be called
+
+        }
+
+        init() {
+            self.e = 17
+        }
+    }
+
+    pub fun createSomeResource(): @SomeResource {
+        return <- create SomeResource()
+    }
+
+    pub fun questsAreFun() {
+        /**************/
+        /*** AREA 3 ****/
+        /**************/
+
+        // a - can read and write
+        // b - can read and write
+        // c - can read but cannot write
+        // d - cannot read and cannot write
+        // publicFunc   - can be called
+        // contractFunc - can be called
+        // privateFunc  - cannot be called
+    }
+
+    init() {
+        self.testStruct = SomeStruct()
+    }
+}
+
+```
+This is a script that imports the contract above:
+
+```
+import SomeContract from 0x01
+
+pub fun main() {
+  /**************/
+  /*** AREA 4 ***/
+  /**************/
+  // a - can read and write
+  // b - can read but cannot write
+  // c - cannot read and cannot write
+  // d - cannot read and cannot write
+  // publicFunc   - can be called
+  // contractFunc - cannot be called
+  // privateFunc  - cannot be called
+
+}
+```
 
 ## Chapter 4 Day 1
 
