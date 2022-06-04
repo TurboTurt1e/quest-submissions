@@ -560,7 +560,9 @@ pub contract resourcePractice {
 }
 
 ```
+
 A transaction that first saves the resource to account storage, then loads it out of account storage, logs a field inside the resource, and destroys it.
+
 ```
 import resourcePractice from 0x01
 
@@ -580,9 +582,11 @@ transaction(name: String, description: String) {
   execute {
     
   }
-}```
+}
+```
 
 A transaction that first saves the resource to account storage, then borrows a reference to it, and logs a field inside the resource.
+
 ```
 import resourcePractice from 0x01
 
@@ -603,6 +607,7 @@ transaction(name: String, description: String) {
     
   }
 }
+
 ```
 ## Chapter 4 Day 2
 
