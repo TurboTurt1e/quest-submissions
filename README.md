@@ -206,9 +206,114 @@ pub fun main(id: Int): FilterPresets.FilterPreset {
 ```
 ## Chapter 3 Day 1
 
+1) In words, list 3 reasons why structs are different from resources. a) Resources cannot be created whenever you want, but Structs can be easily created anywhere. b) Structs can be easily copied, but Resources must be moved. c) You cannot move a Resource into a variable that currently contains a Resource.   
+2) Describe a situation where a resource might be better to use than a struct. When implementing an NFT, a resource is better suited to the task than a struct. 
+3) What is the keyword to make a new resource? create is the keyword to make a new resource
+4) Can a resource be created in a script or transaction (assuming there isn't a public function to create one)? No... A resource can only be created inside the contract.
+5) What is the type of the resource below? Jacob
+6) 
+```
+pub contract Test {
+    pub resource Jacob {
+        pub let rocks: Bool
+        init() {
+            self.rocks = true
+        }
+    }
+    pub fun createJacob(): @Jacob { 
+        let myJacob <- create Jacob() 
+        return <- myJacob 
+    }
+}
+```
+
 ## Chapter 3 Day 2
+1)
+```
+pub contract resourcePractice {
+    pub var resourceArray: @[MyResource]
+    pub var resourceDict: @{String: MyResource}
+
+    pub resource MyResource{
+        pub let name: String
+        init(_name:String) {
+            self.name = _name
+        }
+    }
+
+    pub fun addResourceToArray (resourceToAdd: @MyResource) {
+        self.resourceArray.append(<- resourceToAdd)
+    }
+
+    pub fun removeResourceFromArray(index: Int): @MyResource {
+       return <- self.resourceArray.remove(at: index)
+    }
+
+    pub fun addResourceToDict (resourceToAdd: @MyResource) {
+        let index = resourceToAdd.name
+        self.resourceDict[index] <-! resourceToAdd
+    }
+
+    pub fun removeResourceFromDict (index: String): @MyResource {
+        let removedResource <- self.resourceDict.remove(key: index)!
+        return <- removedResource
+    }
+
+    init(){
+        self.resourceArray <- []
+        self.resourceDict <- {}
+    }
+}
+```
 
 ## Chapter 3 Day 3
+1) Define your own contract that stores a dictionary of resources. Add a function to get a reference to one of the resources in the dictionary.
+```
+pub contract resourcePractice {
+    pub var resourceDict: @{String: MyResource}
+
+    pub resource MyResource{
+        pub let name: String
+        init(_name:String) {
+            self.name = _name
+        }
+    }
+
+    pub fun addResourceToDict (resourceToAdd: @MyResource) {
+        let index = resourceToAdd.name
+        self.resourceDict[index] <-! resourceToAdd
+    }
+
+    pub fun removeResourceFromDict (index: String): @MyResource {
+        let removedResource <- self.resourceDict.remove(key: index)!
+        return <- removedResource
+    }
+
+    pub fun getReferenceToDict (index: String):  &MyResource {
+        return &self.resourceDict[index] as &MyResource
+    }
+
+    init(){
+        self.resourceDict <- {}
+        self.addResourceToDict(resourceToAdd: <- create MyResource(_name:"rare"))
+        self.addResourceToDict(resourceToAdd: <- create MyResource(_name:"super rare"))
+        self.addResourceToDict(resourceToAdd: <- create MyResource(_name:"ultra rare"))
+        
+    }
+}
+```
+
+2) Create a script that reads information from that resource using the reference from the function you defined in part 1.
+```
+import resourcePractice from 0x01
+
+pub fun main():  String {
+    let referenceHandle = resourcePractice.getReferenceToDict(index: "ultra rare")
+    return referenceHandle.name
+}
+```
+
+3) Explain, in your own words, why references can be useful in Cadence. References can be useful when handling complex objects that need to be saved to the blockchain and moved around the blockchain. 
 
 ## Chapter 3 Day 4
 
