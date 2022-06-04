@@ -513,7 +513,97 @@ pub fun main() {
 ```
 
 ## Chapter 4 Day 1
+1) Explain what lives inside of an account. Contract Code and Account Storage and live inside the account. Contract Code is one or more smart contracts containing executable code to be run on the blockchain's virtual machine. Account Storage is where all of your data gets stored.
 
+2) What is the difference between the /storage/, /public/, and /private/ paths?  
+
+The /storage/ path is only accessible by the account owner.
+The /public/ path is available to anybody.
+The /private/ path is only accessible by the account owner and users that the account owner grants access to.
+
+3) What does .save() do? What does .load() do? What does .borrow() do? 
+
+save stores something to the account storage.
+load retrieves something from the account storage.
+borrow retrieves a reference to something in the account storage so that it can be inspected.
+
+
+4) Explain why we couldn't save something to our account storage inside of a script.
+Since we are only able to read data from a script, we cannot save something to our account storage inside of a script.
+
+5) Explain why I couldn't save something to your account.
+Since you have not been granted permission, you cannot save something to my account.
+
+6) Define a contract that returns a resource that has at least 1 field in it. Then, write 2 transactions:
+
+
+```
+pub contract resourcePractice {
+
+    pub resource MyResource{
+        pub let name: String
+        pub let description: String
+        init(_name:String, _description:String) {
+            self.name = _name
+            self.description = _description
+        }
+    }
+
+    pub fun generateMyResource(Name: String, Description: String): @MyResource
+    {
+        return <- create MyResource(_name: Name, _description: Description)
+
+    }
+    init(){
+        
+    }
+}
+
+```
+A transaction that first saves the resource to account storage, then loads it out of account storage, logs a field inside the resource, and destroys it.
+```
+import resourcePractice from 0x01
+
+transaction(name: String, description: String) {
+
+  prepare(signer: AuthAccount) {
+    let newResource <- resourcePractice.generateMyResource(Name: name, Description: description)
+    signer.save(<- newResource, to: /storage/MyResource)
+
+    let loadedResource <- signer.load<@resourcePractice.MyResource>(from: /storage/MyResource)?? panic("error")
+    log(loadedResource.name)
+    log(loadedResource.description)
+    destroy loadedResource
+
+  }
+
+  execute {
+    
+  }
+}```
+
+A transaction that first saves the resource to account storage, then borrows a reference to it, and logs a field inside the resource.
+```
+import resourcePractice from 0x01
+
+transaction(name: String, description: String) {
+
+  prepare(signer: AuthAccount) {
+    let newResource <- resourcePractice.generateMyResource(Name: name, Description: description)
+    signer.save(<- newResource, to: /storage/MyResource)
+
+    let borrowedResource = signer.borrow<&resourcePractice.MyResource>(from: /storage/MyResource)?? panic("error")
+    log(borrowedResource.name)
+    log(borrowedResource.description)
+    
+
+  }
+
+  execute {
+    
+  }
+}
+```
 ## Chapter 4 Day 2
 
 ## Chapter 4 Day 3
