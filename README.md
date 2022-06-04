@@ -619,14 +619,72 @@ transaction(name: String, description: String) {
 
 Resource interfaces can be used to enable controlled access to things in /storage/ that would normally be unavailable to other users by exposing access to certain things via the /public/ path.
 
-3) Deploy a contract that contains a resource that implements a resource interface. Then, do the following:
+3) Deploy a contract that contains a resource that implements a resource interface. 
+
+```
+pub contract resourcePractice {
+
+    pub resource interface Named {
+        pub var name: String
+    }
+
+    pub resource MyResource: Named {
+        pub var name: String
+        pub let description: String
+        init(_name:String, _description:String) {
+            self.name = _name
+            self.description = _description
+        }
+    }
+
+    pub fun generateMyResource(Name: String, Description: String): @MyResource
+    {
+        return <- create MyResource(_name: Name, _description: Description)
+
+    }
+    init(){
+        
+    }
+}
+
+```
+
+Then, do the following:
 
 In a transaction, save the resource to storage and link it to the public with the restrictive interface.
+```
+import resourcePractice from 0x01
+transaction () {
+  prepare(signer: AuthAccount) {
+    signer.save(<- resourcePractice.generateMyResource(Name: "Gobbler", Description: "Deadly Turkey"), to: /storage/MyResource)
+    signer.link<&resourcePractice.MyResource{resourcePractice.Named}>(/public/MyResource, target: /storage/MyResource)
 
+  }
+}
+```
 Run a script that tries to access a non-exposed field in the resource interface, and see the error pop up.
+```
+import resourcePractice from 0x01
+transaction (address: Address) {
+  prepare(signer: AuthAccount) {
 
+  }
+  execute {
+    let myCapability: Capability<&resourcePractice.MyResource> = getAccount(address).getCapability<&resourcePractice.MyResource>(/public/MyResource)
+    let testAccess: &resourcePractice.MyResource = myCapability.borrow() ?? panic("error")
+  }
+}
+```
 Run the script and access something you CAN read from. Return it from the script.
+```
+import resourcePractice from 0x01
+pub fun main(address: Address): String {
+  let myCapability: Capability<&resourcePractice.MyResource{resourcePractice.Named}> = getAccount(address).getCapability<&resourcePractice.MyResource{resourcePractice.Named}>(/public/MyResource)
+  let testAccess: &resourcePractice.MyResource{resourcePractice.Named} = myCapability.borrow() ?? panic("error")
+  return testAccess.name
+}
 
+```
 
 
 ## Chapter 4 Day 3
