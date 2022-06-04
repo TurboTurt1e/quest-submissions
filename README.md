@@ -317,6 +317,82 @@ pub fun main():  String {
 
 ## Chapter 3 Day 4
 
+1) Explain, in your own words, the 2 things resource interfaces can be used for (we went over both in today's content)
+Interfaces can be used to specify implementation requirements and can be used to control access to specific functionality.
+
+2) Define your own contract. Make your own resource interface and a resource that implements the interface. Create 2 functions. In the 1st function, show an example of not restricting the type of the resource and accessing its content. In the 2nd function, show an example of restricting the type of the resource and NOT being able to access its content.
+
+```
+pub contract InterfaceTest {
+    pub resource interface IName {
+       pub let name: String
+    }
+
+    pub resource ExtraSpecialResource: IName {
+        pub let name: String
+        pub let moarData: Int
+        init(_name: String, _number: Int) {
+            self.name = _name
+            self.moarData = _number
+        }
+    }
+
+    pub fun doThis() {
+        let myResource: @ExtraSpecialResource <- create ExtraSpecialResource(_name: "Juice", _number: 2)
+        log(myResource.name)
+        log(myResource.moarData)
+        destroy myResource
+    }
+
+    pub fun notThis() {
+        let myResource: @ExtraSpecialResource{IName} <- create ExtraSpecialResource(_name: "Milk", _number: 1)
+        log(myResource.name)
+        // log(myResource.moarData) //error cannot access this
+        destroy myResource
+    }
+
+}
+```
+
+3) How would we fix this code?
+```
+pub contract Stuff {
+
+    pub struct interface ITest {
+      pub var greeting: String
+      pub var favouriteFruit: String
+      // add changeGreeting to the ITest interface
+      pub fun changeGreeting(newGreeting:String): String
+    }
+
+    // ERROR:
+    // `structure Stuff.Test does not conform 
+    // to structure interface Stuff.ITest`
+    pub struct Test: ITest {
+      pub var greeting: String
+      // implement favoriteFruit to conform with the ITest interface
+      pub var favouriteFruit: String
+
+      pub fun changeGreeting(newGreeting: String): String {
+        self.greeting = newGreeting
+        return self.greeting // returns the new greeting
+      }
+
+      init() {
+        self.greeting = "Hello!"
+        // initialize variable to prevent doomsday scenario
+        self.favouriteFruit = "Dragon Hearts"
+      }
+    }
+
+    pub fun fixThis() {
+      let test: Test{ITest} = Test()
+      let newGreeting = test.changeGreeting(newGreeting: "Bonjour!") // ERROR HERE: `member of restricted type is not accessible: changeGreeting`
+      log(newGreeting)
+    }
+}
+```
+
 ## Chapter 3 Day 5
 
 
