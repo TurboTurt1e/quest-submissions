@@ -820,7 +820,7 @@ An event is useful for allowing a smart contract to communicate to the outside w
 
 2) Deploy a contract with an event in it, and emit the event somewhere else in the contract indicating that it happened.
 
-'''
+```
 pub contract SuperCarFactory {
 
   // define an event here
@@ -843,7 +843,7 @@ pub contract SuperCarFactory {
     }
   }
 }
-'''
+```
 
 3) Using the contract in step 2), add some pre conditions and post conditions to your contract to get used to writing them out.
 
