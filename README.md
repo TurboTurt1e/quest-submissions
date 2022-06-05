@@ -532,7 +532,7 @@ borrow retrieves a reference to something in the account storage so that it can 
 Since we are only able to read data from a script, we cannot save something to our account storage inside of a script.
 
 5) Explain why I couldn't save something to your account.
-Since you have not been granted permission, you cannot save something to my account.
+Save means that we are saving someting to the /storage/ path.  Also, since you have not been granted permission, you cannot save something to my account. 
 
 6) Define a contract that returns a resource that has at least 1 field in it. Then, write 2 transactions:
 
