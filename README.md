@@ -993,4 +993,15 @@ pub contract Test: ITest {
 ```
 ## Chapter 5 Day 3
 
+1) What does "force casting" with as! do? Why is it useful in our Collection?
+
+In the example presented in the lesson, "Force casting" downcasts the "@NonFungibleToken.NFT" type to the "@NFT" type. We do this to make sure that the incoming token is compatible with our specific collection type which is "@NFT".
+
+2) What does auth do? When do we use it?
+
+
+3) This last quest will be your most difficult yet. Take this contract:
+
+
+
 
