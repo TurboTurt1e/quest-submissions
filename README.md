@@ -909,7 +909,9 @@ pub contract Test {
     }
     log(name)
   }
-
+```
+Yes. The name will be logged because Jacob is 5 letters long.
+```
   // TODO
   // Tell me whether or not this function will return a value.
   // name: 'Jacob'
@@ -922,7 +924,12 @@ pub contract Test {
     }
     return name.concat(" Tucker")
   }
+```
+```
+Yes. The name Jacob will work because it's length is greater than zero and the final return value will pass the post condition.
+```
 
+```
   pub resource TestResource {
     pub var number: Int
 
@@ -945,7 +952,8 @@ pub contract Test {
 
 }
 ```
-
+This function will not log the updated number because log is never called in function numberThree... haha... also it will never pass the post condition.
+Since the function will fail the post condition, self.number will revert to it's original state self.number = 0
 
 ## Chapter 5 Day 2
 
