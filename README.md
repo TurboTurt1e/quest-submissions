@@ -478,7 +478,7 @@ access(all) contract SomeContract {
         /**************/
 
         // a - can read and write
-        // b - can read and write
+        // b - can read but cannot write
         // c - can read but cannot write
         // d - cannot read and cannot write
         // publicFunc   - can be called
@@ -501,7 +501,7 @@ pub fun main() {
   /**************/
   /*** AREA 4 ***/
   /**************/
-  // a - can read and write
+  // a - can read but cannot write
   // b - can read but cannot write
   // c - cannot read and cannot write
   // d - cannot read and cannot write
