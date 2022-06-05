@@ -814,6 +814,139 @@ pub contract CryptoPoops {
 
 ## Chapter 5 Day 1
 
+1) Describe what an event is, and why it might be useful to a client. 
+
+An event is useful for allowing a smart contract to communicate to the outside when something has happened.
+
+2) Deploy a contract with an event in it, and emit the event somewhere else in the contract indicating that it happened.
+
+'''
+pub contract SuperCarFactory {
+
+  // define an event here
+  pub event SuperCarMinted(id: UInt64)
+
+  pub resource SuperCar {
+    pub let id: UInt64
+    pub let make: String
+    pub let model: String
+    pub let year: Int
+
+    init(Make: String, Model: String, Year: Int) {
+      self.id = self.uuid
+      self.make = Make
+      self.model = Model
+      self.year = Year
+
+      // broadcast the event to the outside world
+      emit SuperCarMinted(id: self.id)
+    }
+  }
+}
+'''
+
+3) Using the contract in step 2), add some pre conditions and post conditions to your contract to get used to writing them out.
+
+```
+
+pub contract SuperCarFactory {
+
+  // define an event here
+  pub event SuperCarMinted(id: UInt64)
+
+  pub var totalSupply: UInt64
+
+  pub resource SuperCar {
+    pub let id: UInt64
+    pub let make: String
+    pub let model: String
+    pub let year: Int
+
+    init(Make: String, Model: String, Year: Int) {
+      pre {
+      Make.length > 1: "Error... Make is too short."
+      Model.length > 0: "Error... Model is too short."
+      Year > 1886: "Error... Year is too early."
+      Year <= 2022: "Error... Year is too late."
+      }
+      post {
+        before(SuperCarFactory.totalSupply) == SuperCarFactory.totalSupply - 1
+      }
+
+      log(Make)
+      log(Model)
+      log(Year)
+
+      self.id = self.uuid
+      self.make = Make
+      self.model = Model
+      self.year = Year
+
+      SuperCarFactory.totalSupply = SuperCarFactory.totalSupply + 1
+      log(SuperCarFactory.totalSupply)
+      // broadcast the event to the outside world
+      emit SuperCarMinted(id: self.id)
+    }
+  }
+
+  init() {
+    self.totalSupply = 0
+  }
+}
+        
+```
+4) For each of the functions below (numberOne, numberTwo, numberThree), follow the instructions.
+
+```
+pub contract Test {
+
+  // TODO
+  // Tell me whether or not this function will log the name.
+  // name: 'Jacob'
+  pub fun numberOne(name: String) {
+    pre {
+      name.length == 5: "This name is not cool enough."
+    }
+    log(name)
+  }
+
+  // TODO
+  // Tell me whether or not this function will return a value.
+  // name: 'Jacob'
+  pub fun numberTwo(name: String): String {
+    pre {
+      name.length >= 0: "You must input a valid name."
+    }
+    post {
+      result == "Jacob Tucker"
+    }
+    return name.concat(" Tucker")
+  }
+
+  pub resource TestResource {
+    pub var number: Int
+
+    // TODO
+    // Tell me whether or not this function will log the updated number.
+    // Also, tell me the value of `self.number` after it's run.
+    pub fun numberThree(): Int {
+      post {
+        before(self.number) == result + 1
+      }
+      self.number = self.number + 1
+      return self.number
+    }
+
+    init() {
+      self.number = 0
+    }
+
+  }
+
+}
+```
+
+
 ## Chapter 5 Day 2
 
 ## Chapter 5 Day 3
