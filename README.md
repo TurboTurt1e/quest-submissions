@@ -956,7 +956,41 @@ This function will not log the updated number because log is never called in fun
 Since the function will fail the post condition, self.number will revert to it's original state self.number = 0
 
 ## Chapter 5 Day 2
+1) Explain why standards can be beneficial to the Flow ecosystem.
 
+2) What is YOUR favourite food?
+
+3) Please fix this code (Hint: There are two things wrong):
+
+```
+// we must import the contract containing the contract interface ITest from account 0x01
+import ITest from 0x01
+
+// we must add the contract interface using the following syntax
+pub contract Test: ITest {
+  pub var number: Int
+  
+  pub fun updateNumber(newNumber: Int) {
+    self.number = 5
+  }
+
+  pub resource interface IStuff {
+    pub var favouriteActivity: String
+  }
+
+  pub resource Stuff: IStuff {
+    pub var favouriteActivity: String
+
+    init() {
+      self.favouriteActivity = "Playing League of Legends."
+    }
+  }
+
+  init() {
+    self.number = 0
+  }
+}
+```
 ## Chapter 5 Day 3
 
 
