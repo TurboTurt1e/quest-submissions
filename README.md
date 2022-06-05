@@ -925,9 +925,9 @@ Yes. The name will be logged because Jacob is 5 letters long.
     return name.concat(" Tucker")
   }
 ```
-```
+
 Yes. The name Jacob will work because it's length is greater than zero and the final return value will pass the post condition.
-```
+
 
 ```
   pub resource TestResource {
